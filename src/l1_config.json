@@ -1,0 +1,165 @@
+{
+  "seed": 42,
+  "script1_output_subdir_template": "1_teacher_discovery_vfl/",
+  "data_split_params": {
+    "test_size": 0.10,
+    "val_size": 0.10,
+    "stratify_by_target": true
+  },
+  "host_model_lgbm_params": {
+    "n_estimators": 150,
+    "min_child_samples": 15,
+    "learning_rate": 0.05,
+    "max_depth": 8,
+    "colsample_bytree": 0.8,
+    "subsample": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 0.1,
+    "class_weight": "balanced",
+    "random_state": 42,
+    "verbosity": -1,
+    "n_jobs": -1
+  },
+  "host_model_bat_params": {
+    "max_depth": 7,
+    "min_samples_leaf": 20,
+    "criterion": "entropy",
+    "random_state": 42,
+    "max_features": "sqrt"
+  },
+  "segment_identification_params": {
+    "min_leaf_samples_for_error_segment": 25,
+    "host0_leaf_auc_error_threshold": 0.78,
+    "host0_leaf_mae_error_threshold_factor": 1.2
+  },
+  "pre_remote_surrogate_generation": {
+    "enabled": true,
+    "method": "shap_driven_robustify_on_error_set",
+    "top_n_shap_for_host_robustification": 3,
+    "new_surrogate_prefix": "pre_surrx_"
+  },
+  "remote_party_analysis_params": {
+    "min_lift_over_host0_on_error_set": 0.03,
+    "min_remote_rule_support": 50,
+    "remote_teacher_lgbm_params": {
+      "n_estimators": 80,
+      "min_child_samples": 15,
+      "max_depth": 5,
+      "learning_rate": 0.05,
+      "colsample_bytree": 0.7,
+      "subsample": 0.7,
+      "random_state": 42,
+      "verbose": -1,
+      "n_jobs": -1,
+      "feature_penalty_mode": "scaled",
+      "remote_feature_penalty_multiplier": 3,
+      "surrogate_feature_penalty_multiplier": 1,
+      "host_qi_penalty_multiplier": 1.0,
+      "dynamic_hyperparams_on_penalty": {
+        "feature_fraction": 0.5,
+        "bagging_fraction": 0.7,
+        "n_estimators": 60,
+        "min_child_samples": 30
+      }
+    },
+    "remote_teacher_bat_params": {
+      "max_depth": 5,
+      "min_samples_leaf": 30,
+      "random_state": 42,
+      "dynamic_hyperparams_on_penalty": {
+        "max_depth": 4,
+        "min_samples_leaf": 50
+      }
+    }
+  },
+  "k_anonymization_params": {
+    "k_value": 10,
+    "enabled": true
+  },
+  "host_calibration_model_params": {
+    "mini_vfl_lgbm_params": {
+      "n_estimators": 80,
+      "max_depth": 5,
+      "learning_rate": 0.1,
+      "colsample_bytree": 0.8,
+      "subsample": 0.8,
+      "random_state": 42,
+      "verbose": -1,
+      "n_jobs": -1,
+      "min_child_samples": 10
+    }
+  },
+  "info_extraction_params": {
+    "shap_top_n_remote_features_for_rule_context": 5,
+    "shap_top_n_host_features_for_S_hat_model": 5,
+    "mi_n_bins_for_numeric": 5
+  },
+  "pareto_optimization_params": {
+    "enabled": true,
+    "keep_top_n_remote_rules": 5,
+    "w_gain": 0.6,
+    "w_quality": 0.4,
+    "diversity_epsilon_rules": 0.1,
+    "min_rules_for_pareto_input": 3
+  },
+  "llm_s_hat_prompt_generation": {
+    "prompt_template_file": "prompts/llm_s_hat_surrogate_prompt_template.txt"
+  },
+  "final_surrogate_generation_in_l1_r_hats": {
+    "type_A_host0_shap_surrogates": {
+      "enabled": true,
+      "method": "robustify",
+      "top_n_host0_shap_features": 3,
+      "prefix": "h0_shap_surrx_",
+      "phat_interaction_types": [
+        "sum"
+      ],
+      "host_feature_interactions": {
+        "enabled": false
+      }
+    },
+    "type_C_interaction_surrogates": {
+      "enabled": true,
+      "prefix": "final_cross_",
+      "max_interaction_degree": 2,
+      "top_n_phat_for_interactions": 5,
+      "phat_interaction_types": [
+        "ratio",
+        "sum"
+      ],
+      "host_feature_interactions": {
+        "enabled": true,
+        "num_host_features_to_use": 2,
+        "num_phats_to_use_with_host": 2
+      }
+    }
+  },
+  "artifact_names": {
+    "host0_model_pkl": "host0_model.pkl",
+    "host0_bat_rules_txt": "host0_bat_rules.txt",
+    "host0_bat_model_pkl": "host0_bat_model.pkl",
+    "host0_preprocessor_pkl": "host0_preprocessor.pkl",
+    "host0_metrics_json": "host0_metrics.json",
+    "remote_lgbm_error_set_model_pkl": "remote_lgbm_error_set_model.pkl",
+    "remote_bat_error_set_model_pkl": "remote_bat_error_set_model.pkl",
+    "remote_bat_error_set_rules_txt": "remote_bat_error_set_rules.txt",
+    "all_remote_rule_insights_json": "all_remote_rule_insights.json",
+    "selected_remote_rules_for_S_hat_training_json": "selected_remote_rules_for_S_hat_training.json",
+    "mini_lgbm_S_hat_model_template_pkl": "m_{rule_id}.pkl",
+    "mini_lgbm_S_hat_preprocessor_template_pkl": "mp_{rule_id}.pkl",
+    "S_hat_distribution_stats_template_json": "S_{rule_id}.json",
+    "final_rules_for_llm_prompt_json": "final_rules_for_llm_prompt.json",
+    "pareto_analysis_details_json": "pareto_analysis_details_rules.json",
+    "split_indices_json": "host_train_val_test_indices.json",
+    "host_target_cols_csv": "host_target_cols.csv",
+    "host_error_leaf_ids_json": "host_error_leaf_ids.json",
+    "host_data_with_local_surrogates_csv": "host_data_with_local_surrogates.csv",
+    "host_val_for_l2_switchback_features_csv": "host_val_for_l2_switchback_features.csv",
+    "host_val_for_l2_switchback_target_csv": "host_val_for_l2_switchback_target.csv",
+    "pre_remote_surrogate_source_cols_json": "pre_remote_surrogate_source_cols.json",
+    "host_native_full_with_pre_surr_csv": "host_native_full_with_pre_surr.csv",
+    "host_data_for_llm_s_hat_input_csv": "host_data_for_llm_s_hat_input.csv",
+    "llm_s_hat_prompt_txt": "llm_s_hat_prompt.txt",
+    "llm_s_hat_surrogates_csv": "llm_s_hat_surrogates.csv"
+  }
+}

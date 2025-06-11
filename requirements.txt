@@ -1,0 +1,11 @@
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.5.0
+sqlalchemy==2.0.30
+mysql-connector-python==8.4.0
+lightgbm==4.3.0
+shap==0.45.1
+scipy==1.13.1
+requests==2.32.3
+joblib==1.4.2
+# Python 3.12+ is required

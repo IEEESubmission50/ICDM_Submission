@@ -1,0 +1,21 @@
+{
+  "evaluation_spec_file": "evaluation_spec.json",
+  "script1_input_subdir_template": "1_teacher_discovery_vfl/",
+  "script2_output_subdir_template": "1_teacher_discovery_vfl/",
+  "prompt_filename_from_script1": "llm_s_hat_prompt.txt",
+  "host_data_input_csv_from_script1": "host_data_for_llm_s_hat_input.csv",
+  "llm_api_config": {
+    "provider": "",
+    "model_name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+    "api_url": "",
+    "api_key": "",
+    "max_tokens": 8192,
+    "timeout_seconds": 180
+  },
+  "generated_code_filename": "llm_s_hat_code.py",
+  "augmented_host_data_output_csv_name": "llm_s_hat_surrogates.csv",
+  "error_log_filename": "llm_s_hat_exec_errors.log",
+  "fix_code_prompt_template_file": "prompts/fix_code_prompt_template.txt",
+  "max_fix_attempts": 3,
+  "subprocess_timeout_seconds": 600
+}

@@ -1,0 +1,81 @@
+{
+  "evaluation_spec_file": "evaluation_spec.json",
+  "seed": 42,
+  "script1_input_subdir_template": "1_teacher_discovery_vfl/",
+  "script3_output_subdir_template": "3_student_v2/",
+  "surr_feature_prefixes": [
+    "p_hat_rule_",
+    "surr_",
+    "surrx_",
+    "pre_surrx_",
+    "pre_remote_surrx_",
+    "llm_",
+    "final_cross_",
+    "h0_shap_surrx_"
+  ],
+  "max_interaction_degree": 2,
+  "host_model_features": {
+    "native_numeric_key": "HOST_NUMERIC_COLS_FOR_MODELING",
+    "native_categorical_key": "HOST_CATEGORICAL_COLS_FOR_MODELING",
+    "derived_key": "DERIVED_HOST_FEATURES_FOR_MODELING"
+  },
+  "errorboost_lgbm_params": {
+    "type": "lightgbm_classifier",
+    "n_estimators": 80,
+    "min_child_samples": 20,
+    "learning_rate": 0.07,
+    "max_depth": 6,
+    "colsample_bytree": 0.8,
+    "subsample": 0.8,
+    "reg_alpha": 0.3,
+    "reg_lambda": 0.3,
+    "class_weight": "balanced",
+    "random_state": 42,
+    "verbosity": -1,
+    "n_jobs": -1
+  },
+  "sample_weighting": {
+    "enabled": true,
+    "pi_mode": "rule_gain_proportional",
+    "w_tilde_default": 1.0,
+    "clip_max_factor": 3.0,
+    "min_weight_after_clip": 0.1
+  },
+  "evaluation": {
+    "test_size": 0.25,
+    "random_state": 42,
+    "metrics": [
+      "roc_auc_score",
+      "auprc_score",
+      "accuracy_score",
+      "f1_score",
+      "precision_score",
+      "recall_score",
+      "brier_score_loss"
+    ]
+  },
+  "artifact_names": {
+    "s1_augmented_host_data_filename": "host_data_with_local_surrogates.csv",
+    "l1_selected_remote_rules_filename": "selected_remote_rules_for_S_hat_training.json",
+    "l1_host_target_cols_filename": "host_target_cols.csv",
+    "l1_split_indices_filename": "host_train_val_test_indices.json",
+    "errorboost_lgbm_model_filename": "ErrorBoost_LGBM.pkl",
+    "errorboost_lgbm_preprocessor_filename": "ErrorBoost_LGBM_preprocessor.pkl",
+    "hostfit_lgbm_model_filename": "HostFit_LGBM.pkl",
+    "hostfit_lgbm_preprocessor_filename": "HostFit_LGBM_preprocessor.pkl",
+    "final_ensemble_metrics_filename": "final_ensemble_metrics.json",
+    "l2_data_split_info_filename": "l2_data_split_info.json",
+    "l1_host_error_leaf_ids_filename": "host_error_leaf_ids.json",
+    "l1_host0_model_filename": "host0_model.pkl",
+    "l1_host0_preprocessor_filename": "host0_preprocessor.pkl",
+    "l1_host0_bat_model_filename": "host0_bat_model.pkl",
+    "errorboost_train_metrics_filename": "errorboost_train_metrics.json",
+    "test_routing_breakdown_filename": "test_routing_breakdown.json",
+    "feature_discovery_stats_filename": "feature_discovery_stats.json",
+    "errorboost_sample_weights": "errorboost_sample_weights.json",
+    "l1_host_val_for_l2_switchback_features_filename": "host_val_for_l2_switchback_features.csv",
+    "l1_host_val_for_l2_switchback_target_filename": "host_val_for_l2_switchback_target.csv",
+    "segment_model_decision_map_filename": "segment_model_decision_map.json",
+    "segment_performance_comparison_filename": "segment_performance_comparison.json"
+  }
+}

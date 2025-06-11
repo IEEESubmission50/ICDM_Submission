@@ -1,0 +1,181 @@
+{
+  "dataset_name": "incident_response_vfl",
+  "dataset_output_dir_name": "servicenow_support",
+  "db_config_module": "db_access_config",
+  "database": {
+    "MASTER_TABLE_NAME": "incident_master_features",
+    "TABLE_HOST": "incident_host_view",
+    "TABLE_REMOTE": "incident_remote_view"
+  },
+  "column_identifiers": {
+    "VFL_KEY": "number",
+    "QI_COLS": [
+      "assigned_to_raw",
+      "assigned_to_clean"
+    ]
+  },
+  "columns": {
+    "ALL_MASTER_TABLE_COLS": [
+      "number",
+      "opened_at_raw",
+      "opened_at_clean",
+      "resolved_at_raw",
+      "resolved_at_clean",
+      "closed_at_raw",
+      "closed_at_clean",
+      "contact_type_raw",
+      "contact_type_clean",
+      "category_raw",
+      "category_clean",
+      "subcategory_raw",
+      "subcategory_clean",
+      "location_raw",
+      "location_clean",
+      "urgency_raw",
+      "urgency_clean",
+      "priority_raw",
+      "priority_clean",
+      "impact_raw",
+      "impact_clean",
+      "assignment_group_raw",
+      "assignment_group_clean",
+      "assigned_to_raw",
+      "assigned_to_clean",
+      "reassignment_count",
+      "reopen_count",
+      "sys_mod_count",
+      "made_sla_raw",
+      "made_sla_clean",
+      "knowledge_raw",
+      "knowledge_clean",
+      "u_priority_confirmation_raw",
+      "u_priority_confirmation_clean",
+      "problem_id_raw",
+      "problem_id_clean",
+      "rfc_raw",
+      "rfc_clean",
+      "vendor_raw",
+      "vendor_clean",
+      "caused_by_raw",
+      "caused_by_clean",
+      "closed_code_raw",
+      "closed_code_clean",
+      "active_raw",
+      "active_clean",
+      "target_y_fast_6h",
+      "target_y_slow_96h"
+    ],
+    "HOST_DATA_ALL_COLS": [
+      "number",
+      "opened_at_clean",
+      "contact_type_clean",
+      "category_clean",
+      "subcategory_clean",
+      "location_clean",
+      "urgency_clean",
+      "priority_clean",
+      "target_y_fast_6h",
+      "target_y_slow_96h"
+    ],
+    "HOST_CATEGORICAL_COLS_FOR_MODELING": [
+      "contact_type_clean",
+      "category_clean",
+      "subcategory_clean",
+      "location_clean"
+    ],
+    "HOST_NUMERIC_COLS_FOR_MODELING": [
+      "urgency_clean",
+      "priority_clean"
+    ],
+    "REMOTE_ALL_COLS": [
+      "number",
+      "impact_clean",
+      "assignment_group_clean",
+      "assigned_to_clean",
+      "reassignment_count",
+      "reopen_count",
+      "sys_mod_count",
+      "made_sla_clean",
+      "knowledge_clean",
+      "u_priority_confirmation_clean",
+      "problem_id_clean",
+      "rfc_clean",
+      "vendor_clean",
+      "caused_by_clean",
+      "closed_code_clean",
+      "active_clean"
+    ],
+    "REMOTE_NUMERIC_COLS_FOR_MODELING": [
+      "impact_clean",
+      "reassignment_count",
+      "reopen_count",
+      "sys_mod_count",
+      "made_sla_clean",
+      "knowledge_clean",
+      "u_priority_confirmation_clean"
+    ],
+    "REMOTE_CATEGORICAL_COLS_FOR_MODELING": [
+      "assignment_group_clean",
+      "assigned_to_clean",
+      "problem_id_clean",
+      "rfc_clean",
+      "vendor_clean",
+      "caused_by_clean",
+      "closed_code_clean",
+      "active_clean"
+    ]
+  },
+  "column_descriptions": {
+    "number": "Unique incident identifier (VFL Key).",
+    "opened_at_clean": "Host-core: Cleaned opened_at as DATETIME.",
+    "contact_type_clean": "Host-core: Cleaned contact_type.",
+    "category_clean": "Host-core: Cleaned category.",
+    "subcategory_clean": "Host-core: Cleaned subcategory.",
+    "location_clean": "Host-core: Cleaned location.",
+    "urgency_clean": "Host-core: Cleaned urgency (1=High,2=Medium,3=Low).",
+    "priority_clean": "Host-core: Cleaned priority (1=Critical,…,4=Planning).",
+    "target_y_fast_6h": "Target: resolved within 6 h.",
+    "target_y_slow_96h": "Target: resolved after 96 h."
+  },
+  "global_settings": {
+    "TARGET_COLUMN_NAME_PROCESSED": "target",
+    "GLOBAL_LEAK_COLS": [
+      "target_y_fast_6h",
+      "target_y_slow_96h",
+      "resolved_at_raw",
+      "resolved_at_clean",
+      "closed_at_raw",
+      "closed_at_clean"
+    ],
+    "SEED": 42,
+    "N_SPLITS": 5
+  },
+  "tasks": {
+    "IR_A_fast_resolution_6h": {
+      "type": "binary",
+      "description": "Predicts if an incident will be resolved within 6 hours.",
+      "sql_query": "SELECT * FROM {TABLE_REMOTE} k INNER JOIN {TABLE_HOST} h ON k.number = h.number",
+      "target_raw_column": "target_y_fast_6h",
+      "target_definition": "lambda df: df['target_y_fast_6h'].fillna(0).astype(int)",
+      "leak_columns": []
+    },
+    "IR_B_slow_resolution_96h": {
+      "type": "binary",
+      "description": "Predicts if an incident will take longer than 96 hours to resolve.",
+      "sql_query": "SELECT * FROM {TABLE_REMOTE} k INNER JOIN {TABLE_HOST} h ON k.number = h.number",
+      "target_raw_column": "target_y_slow_96h",
+      "target_definition": "lambda df: df['target_y_slow_96h'].fillna(0).astype(int)",
+      "leak_columns": []
+    },
+    "IR_F_phone_contact_fast_resolution": {
+      "type": "binary",
+      "description": "Predicts if an incident reported by Phone will be resolved fast (<=6h). Remote: sys_mod_count, knowledge.",
+      "sql_query": "SELECT * FROM {TABLE_REMOTE} k INNER JOIN {TABLE_HOST} h ON k.number = h.number",
+      "target_raw_column": "target_y_fast_6h",
+      "target_definition": "lambda df: ((df['contact_type_clean'] == 'Phone') & (df['target_y_fast_6h'] == 1)).astype(int)",
+      "leak_columns": [
+        "contact_type_clean"
+      ]
+    }
+  }
+}

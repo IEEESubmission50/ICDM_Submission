@@ -1,0 +1,28 @@
+You are an expert Python data scientist. The following Python code, intended to create surrogate features for a pandas DataFrame, failed during execution.
+
+Original Task Context:
+The goal was to create new host-only features for the task: {task_description}
+The host data contains native numeric features like:
+{host_native_numeric_features_schema}
+And native categorical features like:
+{host_native_categorical_features_schema}
+The surrogate features should be derived ONLY from these available host features.
+The KB insights that inspired these surrogates were: {kb_insights_summary}
+
+Faulty Python Code:
+```python
+{faulty_code}
+Error Message/Traceback from Execution:
+{error_message}
+Please analyze the faulty code and the error message. Provide a corrected version of the Python code.
+The corrected code should define one or more functions, with the main function being apply_surrogates(df: pd.DataFrame) -> pd.DataFrame.
+This function takes a pandas DataFrame df as input and should return the DataFrame with the new or corrected surrogate columns added.
+Ensure the corrected code:
+
+Addresses the error(s) indicated.
+Only uses columns present in the input DataFrame (as per the schema context provided).
+Handles potential division by zero or missing values gracefully.
+Creates new columns with clear, descriptive names, preferably prefixed with surr_.
+Is well-commented.
+
+Return only the corrected Python code block, enclosed in python ... ```.

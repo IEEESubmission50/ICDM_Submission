@@ -1,0 +1,67 @@
+# ----------------------------------------------------------------------------------
+#  PYTHON CODE GENERATOR: S-HAT SURROGATE FEATURES
+# ----------------------------------------------------------------------------------
+#
+#  OBJECTIVE
+#  You are an expert data scientist. Your goal is to write a Python script that
+#  creates new features (surrogates) on a host dataset. These surrogates must
+#  act as proxies for complex rules derived from a separate, remote dataset that
+#  you cannot see directly. Use the context below to infer the logic of the remote
+#  rules and replicate it using only the available host features.
+#
+#  PRIMARY TARGET RULE
+#  Your main goal is to create a surrogate for the following high-value remote rule.
+#  - Rule ID: ${target_remote_rule_id}
+#  - Rule Logic: ${target_remote_rule_logic}
+#
+#  ADDITIONAL CONTEXT: OTHER HIGH-VALUE RULES
+#  To help you understand the broader context, here are other impactful rules discovered
+#  from the remote data. Your surrogate features should ideally help capture the
+#  behavior described by this entire set of rules.
+#
+#  ${supplemental_rules_block}
+#
+#  FULL REMOTE DECISION TREE
+#  This is the complete decision tree from which all rules were extracted. You can use
+#  it to understand the feature interactions and thresholds in detail.
+#  -------------------------------------------------------------------------------
+#   ${remote_decision_tree_text}
+#
+#  AVAILABLE HOST DATA
+#  You must write a Python function that operates on a pandas DataFrame with the
+#  following schema. These are the ONLY columns you can use.
+#
+#  Host Data Schema:
+#  -------------------------------------------------------------------------------
+#  ${host_data_schema}
+#
+#  -------------------------------------------------------------------------------
+#  CHAIN-OF-THOUGHT GUIDANCE
+#  To generate effective surrogates, follow these reasoning steps:
+#  1.  Hypothesize: Based on the remote rule descriptions and host feature names,
+#      what underlying behaviors or concepts do the rules represent?
+#  2.  Map: Which host features (or combinations of features) could approximate
+#      these concepts?
+#  3.  Translate: Convert these mappings into robust Python code using pandas
+#      operations. Create multiple, diverse features that cover different aspects
+#      of the remote rules.
+#
+#  CRITICAL INSTRUCTIONS
+#  -------------------------------------------------------------------------------
+#  1.  OUTPUT FORMAT: Your entire output must be a single, self-contained Python
+#      code block. DO NOT include any explanatory text or markdown.
+#
+#  2.  FUNCTION SIGNATURE: The code must define a function with the exact
+#      signature: `def apply_surrogates(df: pd.DataFrame) -> pd.DataFrame:`.
+#
+#  3.  RETURN VALUE: The function must return a NEW pandas DataFrame containing
+#      ONLY the generated surrogate features. Do not return any of the original columns.
+#
+#  4.  COLUMN NAMING: Every new column name in the returned DataFrame MUST start
+#      with the prefix `llm_surr_`.
+#
+#  5.  FEATURE COUNT: Create approximately ${num_features_to_generate} diverse surrogate features.
+#
+#  6.  IMPORTS: You may only use `pandas` and `numpy`.
+#
+#  Begin generating the Python code now.
